@@ -11,6 +11,10 @@
 #else
 #include "js_module_register.h"
 #endif
+#ifdef SDKBOX_ENABLED
+#include "PluginShareJS.hpp"
+#include "PluginShareJSHelper.h"
+#endif
 
 USING_NS_CC;
 using namespace CocosDenshion;
@@ -69,7 +73,11 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 #else
    js_module_register();
-   ScriptingCore* sc = ScriptingCore::getInstance();
+    ScriptingCore* sc = ScriptingCore::getInstance();
+#ifdef SDKBOX_ENABLED
+    sc->addRegisterCallback(register_all_PluginShareJS);
+    sc->addRegisterCallback(register_all_PluginShareJS_helper);
+#endif
    sc->start();
    sc->runScript("script/jsb_boot.js");
    ScriptEngineProtocol *engine = ScriptingCore::getInstance();
