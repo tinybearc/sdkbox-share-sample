@@ -23,7 +23,7 @@ var HelloWorldLayer = cc.Layer.extend({
         cc.MenuItemFont.setFontSize(32);
 
         var menu = new cc.Menu(
-            new cc.MenuItemFont("clickme", function () {
+            new cc.MenuItemFont("share", function () {
                 invokeSDK();
             }, this)
             );
@@ -37,39 +37,18 @@ var HelloWorldLayer = cc.Layer.extend({
                 return
             }
 
-            if ("undefined" != typeof(sdkbox.PluginAppodeal)) {
-                var plugin = sdkbox.PluginAppodeal
+            if ("undefined" != typeof(sdkbox.PluginShare)) {
+                var plugin = sdkbox.PluginShare
                 plugin.setListener({
-                    onBannerDidLoadAd: function() { cc.log("onBannerDidLoadAd") },
-                    onBannerDidFailToLoadAd: function() { cc.log("onBannerDidFailToLoadAd") },
-                    onBannerDidClick: function() { cc.log("onBannerDidClick") },
-                    onBannerPresent: function() { cc.log("onBannerPresent") },
-                    onInterstitialDidLoadAd: function() { cc.log("onInterstitialDidLoadAd") },
-                    onInterstitialDidFailToLoadAd: function() { cc.log("onInterstitialDidFailToLoadAd") },
-                    onInterstitialWillPresent: function() { cc.log("onInterstitialWillPresent") },
-                    onInterstitialDidDismiss: function() { cc.log("onInterstitialDidDismiss") },
-                    onInterstitialDidClick: function() { cc.log("onInterstitialDidClick") },
-                    onVideoDidLoadAd: function() { cc.log("onVideoDidLoadAd") },
-                    onVideoDidFailToLoadAd: function() { cc.log("onVideoDidFailToLoadAd") },
-                    onVideoDidPresent: function() { cc.log("onVideoDidPresent") },
-                    onVideoWillDismiss: function() { cc.log("onVideoWillDismiss") },
-                    onVideoDidFinish: function() { cc.log("onVideoDidFinish") }
+                  onShareState: function(response) {
+                    console.log("PluginShare onSharestate:" + response.state + " error:" + response.error)
+                    if (response.state == sdkbox.PluginShare.ShareState.ShareStateSuccess) {
+                        console.log("post success")
+                    }
+                }
                 })
                 plugin.init()
-
-                plugin.setDebugEnabled(true);
-                plugin.setUserVkId("user id");
-                plugin.setUserFacebookId("facebook id");
-                plugin.setUserEmail("test@sdkbox.com");
-                plugin.setUserBirthday("11/11/1999"); //DD/MM/YYYY
-                plugin.setUserAge(11);
-                plugin.setUserGender(1);
-                plugin.setUserOccupation(2);
-                plugin.setUserRelationship(1);
-                plugin.setUserSmokingAttitude(0);
-                plugin.setUserAlcoholAttitude(1);
-                plugin.setUserInterests("game");
-                plugin.cacheAd(15);
+                console.log('Share plugin initialized')
             } else {
                 console.log("no plugin init")
             }
@@ -80,9 +59,20 @@ var HelloWorldLayer = cc.Layer.extend({
                 return
             }
 
-            if ("undefined" != typeof(sdkbox.PluginAppodeal)) {
-                var plugin = sdkbox.PluginAppodeal
-                plugin.showAd(1);
+            function addRandomSuffix(s) {
+                var $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefhijklmnopqrstuvwxyz';
+                var maxPos = $chars.length;
+                var len = Math.floor(Math.random() * 5) + 5
+                for (i = 5; i < len; i++) {
+                    s += $chars.charAt(Math.floor(Math.random() * maxPos));
+                }
+                return s;
+            }
+
+            if ("undefined" != typeof(sdkbox.PluginShare)) {
+                console.log('share post')
+                var plugin = sdkbox.PluginShare
+                plugin.share( {text : addRandomSuffix("#sdkbox(www.sdkbox.com) - the cure for sdk fatigue - from js - ")} );
             } else {
                 console.log("no plugin invoked")
             }

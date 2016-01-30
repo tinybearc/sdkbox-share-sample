@@ -14,6 +14,9 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+    
+    std::string getRandomString(const std::string& str);
+    void onShareClick(cocos2d::Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
